@@ -1,0 +1,58 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+struct alp
+{
+    char ch;
+    struct alp* next;
+    struct alp* prior;
+    int num;
+} lower, upper;
+int sn(char ch);
+char alp2(int num, struct alp* a);
+int main(void)
+{
+    struct alp* head = (struct alp*)malloc(sizeof(struct alp));
+    struct alp* store = head;
+
+    for (int i = 0; i < 26; i++)/*creat the circular list*/
+    {
+        struct alp* p = (struct alp*)malloc(sizeof(struct alp));
+        p->ch = 'a' + i;
+        p->num = i;
+        head->next = p;
+        p->prior = head;
+        head = p;
+    }
+    head->next = store->next;
+    store->next->prior = head;
+    char ch;
+    int n;
+    ch = getchar();
+    scanf("%d", &n);
+    n+= (sn(ch)-1);
+    ch = alp2(n, store->next);
+    printf("%c", ch);
+    return 0;
+}
+int sn(char ch)/*get the shifted number*/
+{
+    int i;
+    if (ch >= 'a' && ch <= 'z')
+        i = (ch - 'z') + 26;
+    return i;
+}
+char alp2(int num, struct alp* a)/*get the encipherment*/
+{
+    if (num >= 0)
+    {
+        for (int i = 0; i < num; i++)
+            a = a->next;
+    }
+    else
+    {
+        for (int i = 0; i > num; i--)
+            a = a->prior;
+    }
+     return a->ch;
+}
