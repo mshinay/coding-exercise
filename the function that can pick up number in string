@@ -1,0 +1,53 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include<math.h>
+int decay(char* ch)
+{
+    struct num       /*creat a list to store the number in string*/
+    {
+        int num;
+        int* next;
+    }*head;
+    head = (struct num*)malloc(sizeof(struct num));
+    struct num* p;
+    struct num* p2;
+    p = (struct num*)malloc(sizeof(struct num));
+    p2 = (struct num*)malloc(sizeof(struct num));   /*head pointer to store the address of the first node*/
+    p2->next = p;
+    p->num = 0;
+	int i = 0, j = 0, non = 0,r=1,flag=0; 
+    while (ch[i] != '\0')
+    {
+       
+        if (ch[i] >= '0' && ch[i] <= '9')
+        {
+          
+            while (ch[i + j] >= '0' && ch[i + j] <= '9')
+                j++;
+            for (int z = 0; z < j; z++)
+                 (p->num) += (ch[i + z] - '0') * pow(10, (j - z - 1));  /*use loop to convert character array number into integer*/
+            i += j; /skip the character number converted*/
+            j = 0;
+            flag = 1;   /*judge whether the number have been stored in node and whether creating a new node is necessaruy*/
+        }
+        if (flag)
+        {
+            head->next = p;
+            head = p;
+            non++;
+            p = (struct num*)malloc(sizeof(struct num));
+            p->num = 0;
+        }
+        if (ch[i] == '\0')
+            break;
+        i++;
+    }
+    head->next = NULL;
+    head = p2->next;
+    while (head != NULL)
+    {
+        r*= head->num;  /*the operation is changeable*/
+        head = head->next;
+    }
+    return r;
+}
