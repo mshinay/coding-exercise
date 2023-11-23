@@ -1,0 +1,79 @@
+/*https://www.luogu.com.cn/problem/P3613*/
+#include<stdio.h>
+#include<stdlib.h>
+void deposit(int **line, int col, int stu); /*store the data*/
+int withdraw(int *line,int col);            /*print the data*/
+void biarrey(int*** i, int line, int col);  /*creat a 2 dimensional arrey*/
+void judge(int*** line,int times,int **order); /*judge the commad of input*/
+int fmax(int** order,int times);           /*find out the number of parcle*/
+int main(void)
+{
+	int num, times;
+	int** input;
+	int** box;
+	scanf("%d%d",&num,&times);
+	biarrey(&input, times, 4);
+	
+	for (int i = 0; i < times; i++) /*input the commad*/
+	{
+		scanf("%d", &input[i][0]);
+		if (input[i][0] == 1)
+			for (int j = 1; j < 4; j++)
+				scanf("%d", &input[i][j]);
+		else
+			for(int j=1;j<3;j++)
+			scanf("%d", &input[i][j]);
+	}
+	biarrey(&box,fmax(input,times),100000 );
+
+	judge(&box, times,input);
+
+
+   return 0;
+}
+void biarrey(int*** i, int line, int col)
+{
+	*i = (int**)malloc(sizeof(int*) * line);
+	for (int j = 0; j < line; j++)
+		(*i)[j] = (int*)malloc(sizeof(int) * col);
+
+}
+
+void deposit(int **line, int col, int stu)
+{
+	(*line)[col - 1] = stu;
+}
+
+int withdraw(int* line, int col)
+{
+	int i;
+	i = line[col - 1];
+	return i;
+}
+
+void judge(int*** line,int times,int** order)
+{
+
+	for (int i = 0; i < times; i++)
+	{
+		if (order[i][0] == 1)
+			deposit(&((*line)[order[i][1]]), order[i][2], order[i][3]);
+		else
+			printf("%d\n", withdraw((*line)[order[i][1]], order[i][2]));
+	}
+
+}
+int fmax(int** order,int times)
+{
+	int a = 1;
+	for (int i = 0; i < times; i++)
+	{
+		if (order[i][0] == 1)
+			if (a < order[i][1])
+				a = order[i][1];
+			else
+				continue;
+	}
+	return a;
+
+}
