@@ -1,0 +1,109 @@
+#include<stdio.h>
+#include<stdlib.h>
+typedef char ElemType;
+typedef struct DulNode
+{
+	ElemType data;
+	struct DulNode* next;
+	struct DulNode* prior;
+} DulNode;
+void Initlist(DulNode** list);/*creat a new and empty list*/
+int Listempty(DulNode* list);/*judge a node whether is empty*/
+void Cleanlist(DulNode** list);/*clean a list*/
+void GetElem(DulNode *list, int n, ElemType* e);/* assign the data of n-th node to e*/
+int LocateElem(DulNode* list, ElemType e);/find e in list and reture his serial number*/
+void ListInsert(DulNode** list, int n, ElemType e);/*insert a node in the n-th position in list*/
+void ListDelete(DulNode** list, int n,ElemType *e);/*delete a node in the n-th position in list*/
+int ListLength(DulNode* list);/*calculate the length of list*/
+int main(void)
+{
+}
+void Initlist(DulNode** list)
+{
+	*list = (DulNode*)malloc(sizeof(DulNode));
+	(*list)->next = NULL;
+	(*list)->prior = NULL;
+	return;
+}
+int Listempty(DulNode* list)
+{
+	if (list->next == NULL)
+		return 1;
+	else
+		return 0;
+}
+void Cleanlist(DulNode** list)
+{
+	DulNode *clean;
+	while (*list != NULL)
+	{
+		clean = *list;
+		free(*list);
+		*list = clean->next;
+	}
+	return;
+}
+void GetElem(DulNode *list, int n, ElemType* e)
+{
+	int i = 0;
+	for (; i < n; i++)
+		list = list->next;
+	*e = list->data;
+	return;
+}
+int LocateElem(DulNode* list, ElemType e)
+{
+	int n = 1;
+	while (list != NULL)
+	{
+		if (list->data == e)
+			break;
+		n++;
+		list = list->next;
+	}
+	if (list == NULL)
+		n = 0;
+	return n;
+}
+void ListInsert(DulNode** list, int n, ElemType e)
+{
+	DulNode* newnode = (DulNode*)malloc(sizeof(DulNode));
+	DulNode* prior;
+	newnode->data = e;
+	for (int i = 0; i < n - 1; i++)
+		*list = (*list)->next;
+	  prior= (*list)->next;
+	 newnode->next= (*list)->next;
+	 prior->prior = newnode;
+	 (*list)->next = newnode;
+	 if (newnode->next != NULL)  
+		 newnode->next->prior = newnode;
+	 return;
+}
+void ListDelete(DulNode** list, int n, ElemType* e)
+{
+	DulNode* clean;
+	for (int i = 0; i < n - 1; i++)
+		*list = (*list)->next;
+	    clean = (*list)->next;
+	    *e = clean->data;/*value of deleting*/
+
+		
+
+		
+		clean->next->prior = *list;
+		(*list)->next = clean;
+		clean = (*list)->next;
+		
+		free(clean);
+}
+int ListLengh(DulNode* list)
+{
+	int i = 0;
+	while (list != NULL)
+	{
+		list = list->next;
+			i++;
+	}
+	return i;
+}
