@@ -1,0 +1,110 @@
+#include<stdio.h>
+#include<stdlib.h>
+typedef struct Stack
+{
+	int data;
+	int top;
+	struct Stack* next;
+	struct Stack* rear;
+
+} *stack;
+stack initialize();
+stack push(stack input,int x,stack head);
+void pop(stack input);
+int query(stack input);
+int size(stack input);
+void clean();
+void match(char*** arrey);
+int main(void)
+{
+	char*** arrey;
+	int row,*col,n=0;
+	scanf("%d", &row);
+	clean;
+	arrey = (char***)mallloc(sizeof(char**) * row);
+	col = (int*)malloc(sizeof(int) * row);
+	while (n < row)
+	{
+		scanf("%d", &col[n]);
+		clean;
+		arrey[n] = (char**)malloc(sizeof(char*) * col[n]);
+		for (int i = 0; i < col[n]; i++)
+			arrey[n][col[n]] = (char*)malloc(sizeof(char) * 100);
+		for (int i = 0; i < col[n];i++)
+		{
+			scanf("%s", arrey[n][i]);
+			clean;
+		}
+		n++;
+	}
+
+
+}
+stack initialize()
+{
+	stack s = (stack)malloc(sizeof(struct Stack));
+	s -> top = -1;
+	s->next = NULL;
+	s->rear = NULL;
+	return s;
+}
+stack push(stack input, int x,stack head)
+{
+	stack node= (stack)malloc(sizeof(struct Stack));
+	head->next = node;
+	node->data = x;
+	node->rear = head;
+	node->next = input;
+	input->rear = node;
+	node->top = input->top + 1;
+	return node;
+}
+void pop(stack input)
+{
+	stack clean;
+	if (input == NULL)
+	{
+		printf("Empty");
+		return ;
+	}
+	else
+	{
+		clean = input;
+		(input->rear)->next = input->next;
+		(input->next)->rear = input->rear;
+		input = input->next;
+		free(clean);
+		return ;
+	}
+
+}
+int query(stack input)
+{
+	if (input == NULL)
+	{
+		printf("Anguei!");
+		return NULL;
+	}
+	else
+		return input->data;
+}
+int size(stack input)
+{
+	if (input == NULL)
+		return 0;
+	else
+		return (input->top + 1);
+}
+void clean()
+{
+	while (getchar() != '\n')
+		continue;
+}
+void match(char*** arrey)
+{
+
+
+
+
+
+}
