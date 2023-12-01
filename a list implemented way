@@ -1,0 +1,113 @@
+//https://www.luogu.com.cn/problem/P1981
+#include<stdio.h>
+#include<stdlib.h>
+#include<math.h>
+typedef struct Stack
+{
+	long long data;
+	int top;
+	struct Stack* next;
+	struct Stack* rear;
+} *stack;
+stack Creatstack(void);
+stack push(stack input, long long data);
+long long convertn(char* ch,int j);
+void calculate(stack input, char ch, int n,stack head);
+int main(void)
+{
+	stack input= Creatstack();
+	stack head = input;
+	char ch[60],mid[60],operator[60];
+	int i = 0, j = 0, n = 0;
+	gets_s(ch, 60);
+	while (ch[i] != '\0')
+	{
+		   j = 0;
+		while (ch[i] >= '0' && ch[i] <= '9')
+			mid[j++] = ch[i++];
+		input=push(input, convertn(mid,j));
+		operator[n++] = ch[i];
+		if (ch[i] == '\0')
+			break;
+		   i++;
+	}
+	for ( i = 0; i < n; i++)
+	{
+		if (operator[i] == '*')
+		calculate(input, operator[i], i, head);
+	}
+	for (i = 0; i < n; i++)
+	{
+		if (operator[i] == '+')
+			calculate(input, operator[i], i, head);
+	}
+	long long result = (input->data) % 10000;
+	printf("%lld", result);
+	return 0;
+}
+
+
+
+long long convertn(char* ch,int j)
+{
+	long long data=0;
+	int i;
+	for (i=0; i<j; i++)
+	{
+		data += (ch[i] - '0') * (long long)pow(10, j - i-1);
+	}
+	return data;
+}
+stack Creatstack(void)
+{
+	stack s;
+	s = (stack)malloc(sizeof(struct Stack));
+	s->top = -1;
+	s->next = NULL;
+	s->rear = NULL;
+	return s;
+}
+stack push(stack input, long long data)
+{
+	stack node;
+	node = (stack)malloc(sizeof(struct Stack));
+	node->data = data;
+	node->next = input->next;
+	node->rear = input;
+	node->top = ((input->top)+1);
+	input->next = node;
+	return node;
+}
+void calculate(stack input, char ch, int n,stack head)
+{
+	stack chead = head;
+	stack clean;
+	
+	
+		 while(chead->top!=n)
+			chead =chead ->next;
+		switch (ch)
+		{
+		case '+':
+		{
+			(chead->next)->data = chead->data + (chead->next)->data;
+			clean = chead;
+			(chead->rear)->next = chead->next;
+			(chead->next)->rear = chead->rear;
+			free(clean);
+		}
+		break;
+		case '*':
+		{
+			(chead->next)->data = chead->data * (chead->next)->data;
+			clean = chead;
+			(chead->rear)->next = chead->next;
+			(chead->next)->rear = chead->rear;
+			free(clean);
+		}
+			break;
+		}
+	
+		return;
+
+}
