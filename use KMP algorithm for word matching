@@ -1,0 +1,97 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<ctype.h>
+void mygets(char* ch);//get a string.
+int* getnext(char* ch);//get a next arrey in KMP algorithm
+void compare(char* ch, char* text);
+void convert(char* ch);// convert upper character into lower character.
+int main(void)
+{
+	char ch[50];
+	char text[1000001];
+	mygets(ch);
+	mygets(text);
+	convert(ch);
+	convert(text);
+	compare(ch, text);
+	return 0;
+
+}
+int* getnext(char* ch)
+{
+	int* next=(int*)malloc(sizeof(char)*strlen(ch));
+	int j = 0, i = 1;
+	next[0] = 0;
+	while (ch[i])
+	{
+		if (ch[j] == ch[i])
+		{
+			next[i] = j + 1;
+			i++;
+			j++;
+		}
+		else
+		{
+			if (j == 0)
+			{
+				next[i] = 0;
+				i++;
+			}
+			else
+				j = next[j - 1];
+		}
+	}
+	return next;
+}
+void mygets(char* ch)
+{
+	int i = 0;
+	while ((ch[i] = getchar()) != '\n')
+		i++;
+	ch[i] = '\0';
+	return;
+}
+void compare(char* ch, char* text)
+{
+	int* next = getnext(ch);
+	int j = 0, i = 0,flag=0,position=-1,num=0;
+	while (text[j])
+	{
+		while (text[j] == ch[i]&&text[j]&&ch[i])//judge whether the characters corresponding in different strings are equal or not 
+		{
+			i++;
+			j++;
+			
+		}
+	    if (i == strlen(ch) && (text[j] == ' ' || text[j] == '\0') && (text[j - i - 1] == ' '||j-i==0))//jugde whether the same part in the main string(text) is a single word or not.
+		{
+			if (position == -1)//record the position of the first occurrence of the same single word.
+				position = j - i;
+			num++;
+		}
+		
+			if (i == 0)
+				j++;
+			else
+			i = next[i - 1];
+	}
+		
+		if (num)
+			printf("%d %d", num, position);
+		else
+			printf("%d", position);
+	
+	return;
+
+}
+void convert(char* ch)
+{
+	int i = 0;
+	while (ch[i])
+	{
+		ch[i] = tolower(ch[i]);
+		i++;
+	}
+	return;
+}
